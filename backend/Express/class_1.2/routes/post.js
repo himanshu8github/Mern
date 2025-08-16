@@ -8,16 +8,36 @@ let posts = [
     { id: 4, name: 'himansi' },
 ];
 
-// GET post by id
-router.get('/:id', (req, res) => {
+// const logger = (req, res, next) => {
+//     console.log('Logger ran:', req.method, req.originalUrl);
+
+//     console.log(`${req.method} ${req.protocol}://${req.get('host')}${req.originalUrl}`);
+//     next();
+// }
+
+router.get('/:id',  (req, res, next) => {
     const id = parseInt(req.params.id);
     const post = posts.find(p => p.id === id);
 
     if (!post) {
-        return res.status(404).json({ message: `A post with id ${id} is not found.` });
+       const error = new Error(`A post with id ${id} is not found.` )
+       error.status=404;
+       return next(error);
     }
     res.status(200).json(post);
 });
+
+
+// GET post by id
+// router.get('/:id',  (req, res) => {
+//     const id = parseInt(req.params.id);
+//     const post = posts.find(p => p.id === id);
+
+//     if (!post) {
+//         return res.status(404).json({ message: `A post with id ${id} is not found.` });
+//     }
+//     res.status(200).json(post);
+// });
 
 // POST create new post
 router.post('/postsroute', (req, res) => {
